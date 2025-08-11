@@ -6,12 +6,10 @@ import com.devtiro.database.mappers.Mapper;
 import com.devtiro.database.services.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,6 +34,14 @@ public class AuthorController {
     @GetMapping(path = "/authors")
     public List<AuthorDto> listAuthors() {
         List<AuthorEntity> authors = authorService.findAll();
-       return authors.stream().map(authorMapper::mapTo).collect(Collectors.toList());
+        return authors.stream().map(authorMapper::mapTo).collect(Collectors.toList());
     }
+
+    @GetMapping(path = "/authors/{id}")
+    public ResponseEntity<AuthorDto> getAuthor(@PathVariable("id") Long id) {
+        return authorService.findOne(id)
+                .map(authorEntity -> ResponseEntity.ok(authorMapper.mapTo(authorEntity)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }

@@ -12,4 +12,6 @@ public interface AuthorService {
     List<AuthorEntity> findAll();
 
     void createAuthor(AuthorEntity authorEntity);
+
+    Optional<AuthorEntity> findOne(Long id);
 }

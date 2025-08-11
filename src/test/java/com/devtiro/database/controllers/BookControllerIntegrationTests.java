@@ -3,6 +3,8 @@ package com.devtiro.database.controllers;
 
 import com.devtiro.database.TestDataUtil;
 import com.devtiro.database.domain.dto.BookDto;
+import com.devtiro.database.domain.entities.BookEntity;
+import com.devtiro.database.services.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,20 +24,24 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class BookControllerIntegrationTests {
 
+    private BookService bookService;
+
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
 
     @Autowired
-    public BookControllerIntegrationTests(MockMvc mockMvc) {
+    public BookControllerIntegrationTests(MockMvc mockMvc, BookService bookService) {
         this.mockMvc = mockMvc;
+        this.bookService = bookService;
         this.objectMapper = new ObjectMapper();
+
     }
 
     @Test
     public void testThatCreateBookReturnsHttpStatus201Created() throws Exception {
         BookDto bookDto = TestDataUtil.createTestBookDtoA(null);
-         String createBookJson = objectMapper.writeValueAsString(bookDto);
+        String createBookJson = objectMapper.writeValueAsString(bookDto);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/books/" + bookDto.getIsbn())
@@ -49,17 +55,43 @@ public class BookControllerIntegrationTests {
 
     @Test
     public void testThatCreateBookReturnsCreatedBook() throws Exception {
-        BookDto bookDto = TestDataUtil.createTestBookDtoA(null);
-        String createBookJson = objectMapper.writeValueAsString(bookDto);
+        BookDto testBookDtoA = TestDataUtil.createTestBookDtoA(null);
+        String createBookJson = objectMapper.writeValueAsString(testBookDtoA);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/books/" + bookDto.getIsbn())
+                MockMvcRequestBuilders.put("/books/978-1-2345-6789-0")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBookJson)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.isbn").value(bookDto.getIsbn())
+                MockMvcResultMatchers.jsonPath("$.isbn").value("978-1-2345-6789-0")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.title").value(bookDto.getTitle())
+                MockMvcResultMatchers.jsonPath("$.title").value("The Shadow in The Attic")
+        );
+    }
+
+    @Test
+    public void testThatListBookReturnsHttpStatus200Ok() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatListBooksReturnsBook() throws Exception {
+
+        BookEntity testBookEntityA = TestDataUtil.createTestBookEntityA(null);
+        bookService.createBook(testBookEntityA.getIsbn(), testBookEntityA);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].isbn").value("978-1-2345-6789-0")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].title").value("The Shadow in the Attic")
         );
     }
 }

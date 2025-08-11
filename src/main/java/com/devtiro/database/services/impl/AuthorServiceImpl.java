@@ -23,4 +23,16 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorEntity save(AuthorEntity authorEntity) {
         return authorRepository.save(authorEntity);
     }
+
+    @Override
+    public List<AuthorEntity> findAll() {
+        return StreamSupport.stream(authorRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createAuthor(AuthorEntity authorEntity) {
+        authorRepository.save(authorEntity);
+    }
+
 }

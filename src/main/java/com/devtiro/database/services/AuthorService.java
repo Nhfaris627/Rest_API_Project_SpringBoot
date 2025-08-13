@@ -14,4 +14,6 @@ public interface AuthorService {
     void createAuthor(AuthorEntity authorEntity);
 
     Optional<AuthorEntity> findOne(Long id);
+
+    boolean isExists(Long id);
 }

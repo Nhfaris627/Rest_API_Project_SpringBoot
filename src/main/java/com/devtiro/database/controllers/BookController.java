@@ -31,7 +31,7 @@ public class BookController {
             @RequestBody BookDto bookDto) {
 
         BookEntity bookEntity = bookMapper.mapFrom(bookDto);
-        boolean bookExists = bookService.isExists(isbn)
+        boolean bookExists = bookService.isExists(isbn);
         BookEntity savedBookEntity = bookService.createUpdateBook(isbn, bookEntity);
         BookDto savedBookDto = bookMapper.mapTo(savedBookEntity);
 

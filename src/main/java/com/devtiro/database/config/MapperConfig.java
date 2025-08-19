@@ -23,7 +23,6 @@ public class MapperConfig {
                         com.devtiro.database.domain.entities.BookEntity.class)
                 .addMapping(src -> src.getAuthor(),
                         com.devtiro.database.domain.entities.BookEntity::setAuthorEntity);
-
         return mapper;
     }
 }

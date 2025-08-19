@@ -3,8 +3,10 @@ package com.devtiro.database.services.impl;
 import com.devtiro.database.domain.entities.BookEntity;
 import com.devtiro.database.repositories.BookRepository;
 import com.devtiro.database.services.BookService;
+import org.hibernate.query.Page;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,4 +59,10 @@ public class BookServiceImpl implements BookService {
     public void delete(String isbn) {
         bookRepository.deleteById(isbn);
     }
+
+    @Override
+    public Page<BookEntity> findAll(Pageable pageable) {
+       return bookRepository.findAll(pageable);
+    }
+
 }

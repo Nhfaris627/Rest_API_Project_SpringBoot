@@ -76,4 +76,10 @@ public class BookController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));  // Fixed missing closing parenthesis
     }
 
+    @DeleteMapping(path = "/books/{isbn}")
+    public ResponseEntity deleteBook(@PathVariable("isbn") String isbn)  {
+        bookService.delete(isbn);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 }

@@ -11,6 +11,7 @@ public final class TestDataUtil {
 
     public static AuthorEntity createTestAuthorEntityA() {
         return AuthorEntity.builder()
+                .id(null)  // Changed from 1L to null - let DB generate ID
                 .name("Abigail Rose")
                 .age(80)
                 .build();
@@ -18,6 +19,7 @@ public final class TestDataUtil {
 
     public static AuthorDto createTestAuthorDtoA() {
         return AuthorDto.builder()
+                .id(null)  // Changed from 1L to null
                 .name("Abigail Rose")
                 .age(80)
                 .build();
@@ -25,7 +27,7 @@ public final class TestDataUtil {
 
     public static AuthorEntity createTestAuthorB() {
         return AuthorEntity.builder()
-                .id(2L)
+                .id(null)  // Changed from 2L to null
                 .name("Thomas Cronin")
                 .age(44)
                 .build();
@@ -33,25 +35,17 @@ public final class TestDataUtil {
 
     public static AuthorEntity createTestAuthorC() {
         return AuthorEntity.builder()
-                .id(3L)
+                .id(null)  // Changed from 3L to null
                 .name("Jesse A Casey")
                 .age(24)
                 .build();
     }
 
-    public static BookEntity createTestBookEntityA(final AuthorEntity author) {
+    public static BookEntity createTestBookEntityA(final AuthorEntity authorEntity) {
         return BookEntity.builder()
                 .isbn("978-1-2345-6789-0")
                 .title("The Shadow in the Attic")
-                .authorEntity(author)
-                .build();
-    }
-
-    public static BookDto createTestBookDtoA(final AuthorDto author) {
-        return BookDto.builder()
-                .isbn("978-1-2345-6789-0")
-                .title("The Shadow in the Attic")
-                .author(author)
+                .authorEntity(authorEntity)
                 .build();
     }
 
@@ -63,11 +57,20 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static  BookEntity createTestBookC(final AuthorEntity authorEntity) {
+    public static BookEntity createTestBookC(final AuthorEntity authorEntity) {
         return BookEntity.builder()
                 .isbn("978-1-2345-6789-2")
                 .title("The Last Ember")
                 .authorEntity(authorEntity)
                 .build();
     }
+
+    public static BookDto createTestBookDtoA(final AuthorDto authorDto) {
+        return BookDto.builder()
+                .isbn("978-1-2345-6789-0")
+                .title("The Shadow in the Attic")
+                .author(authorDto)
+                .build();
+    }
+
 }

@@ -5,6 +5,7 @@ import com.devtiro.database.domain.dto.BookDto;
 import com.devtiro.database.domain.entities.BookEntity;
 import com.devtiro.database.mappers.Mapper;
 import com.devtiro.database.services.BookService;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,23 @@ public class BookController {
         }
 
     }
+
+    @PatchMapping(path = "/books/{isbn}")
+    public ResponseEntity<BookDto> partialUpdateBook(
+            @PathVariable("isbn") String isbn,
+            @RequestBody BookDto bookDto
+    ){
+        if(!bookService.isExists(isbn)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        BookEntity bookEntity = bookMapper.mapFrom(bookDto);
+        BookEntity updatedBookEntity = bookService.partialUpdate(isbn, bookEntity);
+        return new ResponseEntity<>(
+                bookMapper.mapTo(updatedBookEntity),
+                HttpStatus.OK);
+    }
+
 
     @GetMapping(path = "/books")
     public List<BookDto> listBooks() {

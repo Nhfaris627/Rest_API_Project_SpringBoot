@@ -26,7 +26,7 @@ A comprehensive REST API for managing books and authors built with Spring Boot, 
 
 The project follows a layered architecture pattern:
 
-``
+```
 ├── controllers/     # REST endpoints
 ├── services/        # Business logic  
 ├── repositories/    # Data access layer
@@ -35,7 +35,7 @@ The project follows a layered architecture pattern:
 │   └── dto/         # Data transfer objects
 ├── mappers/         # Entity-DTO mapping
 └── config/          # Configuration classes
-``
+```
 
 ## Quick Start
 
